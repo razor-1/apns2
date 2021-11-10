@@ -72,7 +72,7 @@ func (t *Token) GenerateIfExpired() (bearer string) {
 	t.Lock()
 	defer t.Unlock()
 	if t.Expired() {
-		t.Generate()
+		_, _ = t.Generate()
 	}
 	return t.Bearer
 }

@@ -16,11 +16,10 @@ import (
 
 // Possible errors when parsing a certificate.
 var (
-	ErrFailedToDecryptKey       = errors.New("failed to decrypt private key")
-	ErrFailedToParsePrivateKey  = errors.New("failed to parse private key")
-	ErrFailedToParseCertificate = errors.New("failed to parse certificate PEM data")
-	ErrNoPrivateKey             = errors.New("no private key")
-	ErrNoCertificate            = errors.New("no certificate")
+	ErrFailedToDecryptKey      = errors.New("failed to decrypt private key")
+	ErrFailedToParsePrivateKey = errors.New("failed to parse private key")
+	ErrNoPrivateKey            = errors.New("no private key")
+	ErrNoCertificate           = errors.New("no certificate")
 )
 
 // FromP12File loads a PKCS#12 certificate from a local file and returns a
@@ -108,9 +107,11 @@ func FromPemBytes(bytes []byte, password string) (tls.Certificate, error) {
 	return cert, nil
 }
 
+// for now, leaving this in place despite these methods being deprecated. Need to further investigate if it's still
+// required to support this.
 func unencryptPrivateKey(block *pem.Block, password string) (crypto.PrivateKey, error) {
-	if x509.IsEncryptedPEMBlock(block) {
-		bytes, err := x509.DecryptPEMBlock(block, []byte(password))
+	if x509.IsEncryptedPEMBlock(block) { //nolint
+		bytes, err := x509.DecryptPEMBlock(block, []byte(password)) //nolint
 		if err != nil {
 			return nil, ErrFailedToDecryptKey
 		}

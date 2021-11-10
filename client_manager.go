@@ -2,14 +2,14 @@ package apns2
 
 import (
 	"container/list"
-	"crypto/sha1"
+	"crypto/sha256"
 	"crypto/tls"
 	"sync"
 	"time"
 )
 
 type managerItem struct {
-	key      [sha1.Size]byte
+	key      [sha256.Size]byte
 	client   *Client
 	lastUsed time.Time
 }
@@ -31,7 +31,7 @@ type ClientManager struct {
 	// manager.
 	Factory func(certificate tls.Certificate) *Client
 
-	cache map[[sha1.Size]byte]*list.Element
+	cache map[[sha256.Size]byte]*list.Element
 	ll    *list.List
 	mu    sync.Mutex
 	once  sync.Once
@@ -130,7 +130,7 @@ func (m *ClientManager) Len() int {
 
 func (m *ClientManager) initInternals() {
 	m.once.Do(func() {
-		m.cache = map[[sha1.Size]byte]*list.Element{}
+		m.cache = map[[sha256.Size]byte]*list.Element{}
 		m.ll = list.New()
 	})
 }
@@ -151,12 +151,12 @@ func (m *ClientManager) removeElement(e *list.Element) {
 	delete(m.cache, e.Value.(*managerItem).key)
 }
 
-func cacheKey(certificate tls.Certificate) [sha1.Size]byte {
+func cacheKey(certificate tls.Certificate) [sha256.Size]byte {
 	var data []byte
 
 	for _, cert := range certificate.Certificate {
 		data = append(data, cert...)
 	}
 
-	return sha1.Sum(data)
+	return sha256.Sum256(data)
 }
