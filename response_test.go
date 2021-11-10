@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	apns "github.com/sideshow/apns2"
+	apns "github.com/razor-1/apns2"
 	"github.com/stretchr/testify/assert"
 )
 

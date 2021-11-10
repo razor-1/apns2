@@ -1,4 +1,4 @@
-module github.com/sideshow/apns2
+module github.com/razor-1/apns2
 
 go 1.17
 

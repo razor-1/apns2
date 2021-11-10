@@ -15,7 +15,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/sideshow/apns2/token"
+	"github.com/razor-1/apns2/token"
 	"golang.org/x/net/http2"
 )
 

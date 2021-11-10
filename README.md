@@ -8,7 +8,7 @@ APNS/2 is a go package designed for simple, flexible and fast Apple Push Notific
 
 ## Fork
 
-This is a fork of https://github.com/sideshow/apns2, which was apparently abandoned. It removes vendoring and adopts go modules.
+This is a fork of https://github.com/razor-1/apns2, which was apparently abandoned. It removes vendoring and adopts go modules.
 There are a few minor changes and the removal of insecure dependencies.
 
 ## Features
