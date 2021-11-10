@@ -140,7 +140,7 @@ func TestDialTLSTimeout(t *testing.T) {
 	if _, e = dialTLS("tcp", address, nil); e == nil {
 		t.Fatal("Dial completed successfully")
 	}
-	assert.True(t, errors.Is(e, context.DeadlineExceeded))
+	assert.Truef(t, errors.Is(e, context.DeadlineExceeded), "unexpected error %v of type %T", e, e)
 }
 
 // Functional Tests
