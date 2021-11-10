@@ -8,13 +8,14 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"time"
 
-	"github.com/sideshow/apns2/token"
+	"github.com/razor-1/apns2/token"
 	"golang.org/x/net/http2"
 )
 
@@ -83,9 +84,7 @@ type connectionCloser interface {
 func NewClient(certificate tls.Certificate) *Client {
 	tlsConfig := &tls.Config{
 		Certificates: []tls.Certificate{certificate},
-	}
-	if len(certificate.Certificate) > 0 {
-		tlsConfig.BuildNameToCertificate()
+		MinVersion:   tls.VersionTLS12,
 	}
 	transport := &http2.Transport{
 		TLSClientConfig: tlsConfig,
@@ -184,7 +183,7 @@ func (c *Client) PushWithContext(ctx Context, n *Notification) (*Response, error
 	response.ApnsID = httpRes.Header.Get("apns-id")
 
 	decoder := json.NewDecoder(httpRes.Body)
-	if err := decoder.Decode(&response); err != nil && err != io.EOF {
+	if err = decoder.Decode(&response); err != nil && !errors.Is(err, io.EOF) {
 		return &Response{}, err
 	}
 	return response, nil
@@ -224,7 +223,6 @@ func setHeaders(r *http.Request, n *Notification) {
 	} else {
 		r.Header.Set("apns-push-type", string(PushTypeAlert))
 	}
-
 }
 
 func (c *Client) requestWithContext(ctx Context, req *http.Request) (*http.Response, error) {

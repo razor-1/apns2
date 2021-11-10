@@ -1,0 +1,28 @@
+run:
+  timeout: 5m
+linters:
+  enable:
+    - bodyclose
+    - cyclop
+    - durationcheck
+    - errorlint
+    - exportloopref
+    - gocritic
+    - gosec
+    - nolintlint
+    - prealloc
+    - rowserrcheck
+    - sqlclosecheck
+    - thelper
+    - unconvert
+    - whitespace
+
+issues:
+  max-same-issues: 0
+  exclude-rules:
+    # don't run these on tests. lots of complaints about not closing response bodies, variable urls, etc. that aren't
+    # relevant in tests
+    - path: _test\.go
+      linters:
+        - gosec
+        - bodyclose
